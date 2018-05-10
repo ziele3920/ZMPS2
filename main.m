@@ -7,11 +7,32 @@ processedImage = rakiFCIRC(imageNo).image;
 [I, mask] = CutCyc(processedImage);
 I = uint8(I);
 
-th = max(I(:))/1.3;
+th = max(I(:))/1.4;
 I(I<th) = 0;
+I32 = double(I);
+I32 = I32.^2;
+arr0 = I32(:);
+arr0 = sort(arr0);
+%I32 = I32 - min(I32(:)) + 1;
+
+maxVv = 255;
+min32 = 0;
+for ii=1:length(arr0)
+    if arr0(ii) == 0
+        continue;
+    end
+    min32 = arr0(ii);
+    break;
+end
+
+I32 = (I32 - min32)/(max(I32(:)) - min32) * maxVv;
+I32(I32 < 0) = 0;
+xD = I32(:);
+I = uint8(I32);
+
 arr = I(:);
-arr = sort(arr);
-minV = 0;
+arr = sort(arr);minV = 0;
+figure; plot(arr);
 for ii=1:length(arr)
     if arr(ii) == 0
         continue;
@@ -26,8 +47,10 @@ I = imadjust(I);
 %se = strel('disk',9);
 %I = imopen(I,se);
 
-figure; subplot(121); imshow(rakiFCIRC(imageNo).image);
+figure; subplot(121); imshow(rakiFCIRC(imageNo).image); 
+viscircles([rakiFCIRC(imageNo).rakCircle(1) 1024 - rakiFCIRC(imageNo).rakCircle(2)], rakiFCIRC(imageNo).rakCircle(3));
 subplot(122); imshow(I);
+viscircles([rakiFCIRC(imageNo).rakCircle(1) 1024 - rakiFCIRC(imageNo).rakCircle(2)], rakiFCIRC(imageNo).rakCircle(3));
 title(num2str(ri));
 end
 classesNo = 6;
