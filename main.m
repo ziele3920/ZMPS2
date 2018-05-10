@@ -1,13 +1,13 @@
 close all; clear; clc;
 
 rakiFCIRC = ReadRaki('F', 'CIRC');
-imageNo = 4;
+for ri = 1 : 14
+imageNo = ri;
 processedImage = rakiFCIRC(imageNo).image;
 [I, mask] = CutCyc(processedImage);
 I = uint8(I);
 
-
-th = max(I(:))/1.5;
+th = max(I(:))/1.3;
 I(I<th) = 0;
 arr = I(:);
 arr = sort(arr);
@@ -22,10 +22,14 @@ end
 I(I == 0) = minV;
 I = imadjust(I);
 
+%aff = sort(I(:));
+%se = strel('disk',9);
+%I = imopen(I,se);
 
 figure; subplot(121); imshow(rakiFCIRC(imageNo).image);
 subplot(122); imshow(I);
-
+title(num2str(ri));
+end
 classesNo = 6;
 funKmeans = @(block_struct) kMeans(block_struct.data, classesNo);
 fun_contrast = @ (struktura_bloku) GLCM_contrast(struktura_bloku.data)*ones(size(struktura_bloku.data));
