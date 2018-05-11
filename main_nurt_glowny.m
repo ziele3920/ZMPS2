@@ -59,20 +59,15 @@ for ri = 1 : 1
     I(I == 0) = minV;
     I = imadjust(I);
     
-%     aff = sort(I(:));
-%     se = strel('disk',3);
-%     I = imopen(I,se);
-%     I = imerode(I, se);
-    
     figure; subplot(121); imshow(rakiFCIRC(imageNo).image);
     viscircles([rakiFCIRC(imageNo).rakCircle(1) 1024 - rakiFCIRC(imageNo).rakCircle(2)], rakiFCIRC(imageNo).rakCircle(3));
     subplot(122); imshow(I);
     viscircles([rakiFCIRC(imageNo).rakCircle(1) 1024 - rakiFCIRC(imageNo).rakCircle(2)], rakiFCIRC(imageNo).rakCircle(3));
     title(num2str(ri));
     
-    classesNo = 3;
+    classesNo = 2; %liczba klas
     funKmeans = @(block_struct) kMeans(block_struct.data, classesNo);
-      
+
     I_median30 = wiener2(I, [20 20]);
     loverValue = 20;
     higherVaule = 1024;
@@ -80,17 +75,9 @@ for ri = 1 : 1
     blockHeightH = higherVaule;
     blockWidthV = higherVaule;
     blockHeightV = loverValue;
-    %I2 = blockproc(I_median30, [blockWidthH blockHeightH], fun_contrast);
-    %I2 = paseczkowanieWFORZE(I_median30, 1024, 64, [16 16]);
-    %I3 = paseczkowanieWFORZE(I_median30, 64, 1024, [16 16]);
     I2 = double(blockproc(I_median30, [60 1024], funKmeans));
     I3 = double(blockproc(I_median30, [1024 60], funKmeans));
     
-    %Id = double(I_median30(:));
-    %Ind = kmeans(Id, classesNo);
-    %I2 = reshape(Ind, [size(I_median30, 1) size(I_median30, 2)]);
-    
-    %I2 = blockproc(I2, [blockWidthV blockHeightV], funKmeans);
     figure;
     subplot(2,2,[1,3]); imshow(uint8(I_median30));
     viscircles([rakiFCIRC(imageNo).rakCircle(1) 1024 - rakiFCIRC(imageNo).rakCircle(2)], rakiFCIRC(imageNo).rakCircle(3));
@@ -98,5 +85,4 @@ for ri = 1 : 1
     viscircles([rakiFCIRC(imageNo).rakCircle(1) 1024 - rakiFCIRC(imageNo).rakCircle(2)], rakiFCIRC(imageNo).rakCircle(3));
     subplot(224); imagesc(I3);
     viscircles([rakiFCIRC(imageNo).rakCircle(1) 1024 - rakiFCIRC(imageNo).rakCircle(2)], rakiFCIRC(imageNo).rakCircle(3));
-    %subplot(122); imshow(I2);
 end
