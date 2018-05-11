@@ -33,6 +33,7 @@ mask_arm(mask_arm ~= 0) = 1;
 mask = mask_arm;
 
 cutCyc = double(image) .* mask_arm;
+cutCyc = uint8(cutCyc);
 %figure; imagesc(Ind2);
 %figure; imagesc(mask_arm);
 %figure; imagesc(cutCyc);
