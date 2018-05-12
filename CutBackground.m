@@ -1,4 +1,4 @@
-function [cutCyc, mask] = CutCyc(image)
+function [breastImg, mask] = CutBackground(image)
 %Algorytm Raka ma byæ funkcja
 %single image feom MIAS database
 k = 2;
@@ -32,8 +32,8 @@ mask_arm = imfill(mask_arm, 'holes');
 mask_arm(mask_arm ~= 0) = 1;
 mask = mask_arm;
 
-cutCyc = double(image) .* mask_arm;
-cutCyc = uint8(cutCyc);
+breastImg = double(image) .* mask_arm;
+breastImg = uint8(breastImg);
 %figure; imagesc(Ind2);
 %figure; imagesc(mask_arm);
 %figure; imagesc(cutCyc);

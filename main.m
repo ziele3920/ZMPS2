@@ -1,11 +1,11 @@
 close all; clear; clc;
 
-rakiFCIRC = ReadRaki('F', 'CIRC');
+rakiFCIRC = LoadImages('F', 'CIRC');
 for ri = 4 : 4
     imageNo = ri;
     processedImage = rakiFCIRC(imageNo).image;
 
-    [I, mask] = CutCyc(processedImage);
+    [I, mask] = CutBackground(processedImage);
     I = ThresholdAndSetHighBackground(I, 1.4);
 
     I32 = double(I);
@@ -25,12 +25,13 @@ for ri = 4 : 4
     funKmeans = @(block_struct) kMeans(block_struct.data, classesNo);
 
     I_median30 = wiener2(I, [20 20]);
-
+    blockWidth = 60;
+    imgSize = 1024;
     %I2 = blockproc(I_median30, [blockWidthH blockHeightH], fun_contrast);
     %I2 = paseczkowanieWFORZE(I_median30, 1024, 64, [16 16]);
     %I3 = paseczkowanieWFORZE(I_median30, 64, 1024, [16 16]);
-    I2 = double(blockproc(I_median30, [60 1024], funKmeans));
-    I3 = double(blockproc(I_median30, [1024 60], funKmeans));
+    I2 = double(blockproc(I_median30, [blockWidth imgSize], funKmeans));
+    I3 = double(blockproc(I_median30, [imgSize blockWidth], funKmeans));
 
     figure; subplot(121); imshow(rakiFCIRC(imageNo).image); 
     title(['Oryginalny obraz ' rakiFCIRC(imageNo).fileName]);

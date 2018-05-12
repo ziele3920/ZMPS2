@@ -1,4 +1,4 @@
-function rakiStruct = ReadRaki(breastTissueType, rakType)
+function rakiStruct = LoadImages(breastTissueType, rakType)
 
 fileNameColumnNo = 1;
 tissueTypeColumnNo = 2;
